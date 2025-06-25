@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+ENV/
+.Python
+
+# Django
+*.sqlite3
+db.sqlite3
+*.log
+
+# Pipenv or poetry
+Pipfile.lock
+poetry.lock
