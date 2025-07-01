@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
@@ -53,6 +53,8 @@ function Dashboard() {
         <div className="mt-8 text-center">
           <button
             onClick={() => {
+              localStorage.removeItem('token')
+              localStorage.removeItem('username')
               navigate("/login");
             }}
             className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition"
