@@ -1,68 +1,60 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
-function Register() {
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
+function Login() {
   const navigate = useNavigate();
 
-  const [formErrorData, setFormErrorData] = useState('')
   const [formData, setFormData] = useState({
-    'username': '',
-    'email': '',
-    'password': ''
-  })
+    username: '',
+    password: ''
+  });
+
+  const [formError, setFormError] = useState('');
 
   const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value 
-    }))
-  }
+      [e.target.name]: e.target.value
+    }));
+  };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-      const response = await axios.post('http://127.0.0.1:8000/api/register/', formData);
-      console.log(response)
-      alert('Registration Successful')
-      navigate('/login')
+    setFormError('');
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/login/', formData);
+      alert('Login Successful');
+      navigate('/dashboard');
     } catch (error) {
-      const errorMsg = error.response?.data?.error || 'Registration Failed';
-      setFormErrorData(errorMsg)
+      const errorMsg = error.response?.data?.error || 'Login Failed';
+      setFormError(errorMsg);
     }
-  }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
       <form onSubmit={handleSubmit} className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm flex flex-col gap-4">
-        <h2 className="text-2xl font-bold text-center text-gray-800">Register</h2>
-        {formErrorData && (
+        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+
+        {formError && (
           <div className="bg-red-100 text-red-700 p-2 rounded text-center text-sm">
-            {formErrorData}
+            {formError}
           </div>
         )}
+
         <input
           className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           type="text"
           name="username"
-          id="username"
           value={formData.username}
           onChange={handleChange}
           placeholder="Enter Username"
         />
         <input
           className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-          type="email"
-          name="email"
-          id="email"
-          value={formData.email}
-          onChange={handleChange}
-          placeholder="Enter Email"
-        />
-        <input
-          className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
           type="password"
           name="password"
-          id="pass"
           value={formData.password}
           onChange={handleChange}
           placeholder="Enter Password"
@@ -75,7 +67,7 @@ function Register() {
         </button>
       </form>
     </div>
-  )
+  );
 }
 
-export default Register
+export default Login;
