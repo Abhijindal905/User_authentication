@@ -25,7 +25,7 @@ def register_user(request):
         password=password   #by using the create_user the password is automatically hashed
     )
 
-    return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
+    return Response({'message': 'User registered successfully', 'username': name}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
@@ -39,7 +39,7 @@ def login_user(request):
     user = authenticate(request, username=username, password=password)
 
     if user is not None:
-        return Response({'message': 'Login successful'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Login successful', 'username': username}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
     
