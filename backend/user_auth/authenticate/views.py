@@ -44,7 +44,7 @@ def login_user(request):
 
     if user is not None:
         refresh = RefreshToken.for_user(user)
-        return Response({'message': 'Login successful', 'username': username, 'access': str(refresh.access_token),'refresh': str(refresh)}, status=status.HTTP_200_OK)
+        return Response({'message': 'Login successful', 'username': username, 'email' : user.email ,'access': str(refresh.access_token),'refresh': str(refresh)}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
     

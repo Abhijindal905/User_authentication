@@ -25,9 +25,11 @@ function Login() {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login/', formData);
       const username = response.data.username;
+      const email = response.data.email
       localStorage.setItem('access', response.data.access);
       localStorage.setItem('refresh', response.data.refresh);
       localStorage.setItem('username', username)
+      localStorage.setItem('email', email)
       alert('Login Successful');
       navigate('/dashboard');
     } catch (error) {

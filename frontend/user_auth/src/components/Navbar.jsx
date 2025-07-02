@@ -14,7 +14,6 @@ function Navbar() {
   let navLinks;
 
   if (access) {
-    // User is logged in
     navLinks = (
       <>
         <Link to="/dashboard" className="hover:underline">Dashboard</Link>
@@ -30,7 +29,6 @@ function Navbar() {
       </>
     );
   } else {
-    // User is NOT logged in
     navLinks = (
       <>
         <Link to="/" className="hover:underline">Register</Link>
