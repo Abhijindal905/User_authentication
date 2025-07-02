@@ -53,5 +53,6 @@ def login_user(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def user_dashboard(request):
-    return Response({'message': f'Hello, {request.user.username}'})
+    user = request.user
+    return Response({'username': user.username, 'email': user.email, 'task_completed': 8, 'actions': "doing walking"})
     
