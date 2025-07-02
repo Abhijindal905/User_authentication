@@ -25,7 +25,8 @@ function Login() {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login/', formData);
       const username = response.data.username;
-      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('access', response.data.access);
+      localStorage.setItem('refresh', response.data.refresh);
       localStorage.setItem('username', username)
       alert('Login Successful');
       navigate('/dashboard');

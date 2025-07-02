@@ -7,24 +7,62 @@ function Dashboard() {
   const username = localStorage.getItem("username");
   const navigate = useNavigate();
 
-  const token = localStorage.getItem("token");
+  const access = localStorage.getItem("access");
 
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/dashboard/", {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      })
-      .then((res) => console.log(res.data))
-      .catch((err) => {
-        console.error(err);
+    const fetchDashboard = async () => {
+      try {
+        const access = localStorage.getItem("access");
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/dashboard/",
+          {
+            headers: {
+              Authorization: `Bearer ${access}`,
+            },
+          }
+        );
+      } catch (err) {
         if (err.response?.status === 401) {
-          alert("Session expired. Please login again.");
-          navigate("/login");
+          setErrorMessage("Access token expired. Attempting to refresh...");
+          const refresh = localStorage.getItem("refresh");
+          if (refresh) {
+            try {
+              const tokenres = await axios.get(
+                "http://127.0.0.1:8000/api/token/refresh/",
+                {
+                  refresh,
+                }
+              );
+
+              const newAccess = tokenres.data.access;
+              localStorage.setItem("access", newAccess);
+
+              const newResponse = await axios.get(
+                "http://127.0.0.1:8000/api/dashboard/",
+                {
+                  headers: {
+                    Authorization: `Bearer ${access}`,
+                  },
+                }
+              );
+
+            } catch (refreshErr) {
+              console.warn("Session expired. Please login again.");
+              localStorage.clear();
+              navigate("/login");
+            }
+          } else {
+            console.error("Session expired. Please login again.");
+            localStorage.clear();
+            navigate("/login");
+          }
+        } else {
+          console.log(err);
         }
-      });
-  }, [navigate, token]);
+      }
+    };
+    fetchDashboard();
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-200 flex flex-col items-center justify-center p-8">
@@ -53,8 +91,8 @@ function Dashboard() {
         <div className="mt-8 text-center">
           <button
             onClick={() => {
-              localStorage.removeItem('token')
-              localStorage.removeItem('username')
+              localStorage.removeItem("access");
+              localStorage.removeItem("username");
               navigate("/login");
             }}
             className="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition"
